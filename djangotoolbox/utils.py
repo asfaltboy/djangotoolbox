@@ -1,11 +1,6 @@
 def make_tls_property(default=None):
-    """
-    Creates a class-wide instance property with a thread-specific
-    value.
-    """
-
+    """Creates a class-wide instance property with a thread-specific value."""
     class TLSProperty(object):
-
         def __init__(self):
             from threading import local
             self.local = local()
@@ -20,18 +15,14 @@ def make_tls_property(default=None):
 
         def _get_value(self):
             return getattr(self.local, 'value', default)
-
         def _set_value(self, value):
             self.local.value = value
         value = property(_get_value, _set_value)
 
     return TLSProperty()
 
-
 def getattr_by_path(obj, attr, *default):
-    """
-    Like getattr(), but can go down a hierarchy like "attr.subattr".
-    """
+    """Like getattr(), but can go down a hierarchy like 'attr.subattr'"""
     value = obj
     for part in attr.split('.'):
         if not hasattr(value, part) and len(default):
@@ -41,18 +32,16 @@ def getattr_by_path(obj, attr, *default):
             value = value()
     return value
 
-
 def subdict(data, *attrs):
     """Returns a subset of the keys of a dictionary."""
     result = {}
     result.update([(key, data[key]) for key in attrs])
     return result
 
-
 def equal_lists(left, right):
     """
-    Compares two lists and returs True if they contain the same
-    elements, but doesn't require that they have the same order.
+    Compares two lists and returs True if they contain the same elements, but
+    doesn't require that they have the same order.
     """
     right = list(right)
     if len(left) != len(right):
@@ -63,7 +52,6 @@ def equal_lists(left, right):
         else:
             return False
     return True
-
 
 def object_list_to_table(headings, dict_list):
     """
@@ -87,7 +75,6 @@ def object_list_to_table(headings, dict_list):
     return [headings] + [tuple([getattr_by_path(row, heading, None)
                                 for heading in headings])
                          for row in dict_list]
-
 
 def dict_list_to_table(headings, dict_list):
     """
